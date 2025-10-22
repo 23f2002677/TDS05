@@ -2,8 +2,8 @@ name: Daily Commit
 
 on:
   schedule:
-    - cron: '30 8 * * *'  # Runs daily at 08:30 UTC
-  workflow_dispatch:  # Allows manual trigger
+    - cron: '30 8 * * *'  # Daily at 08:30 UTC
+  workflow_dispatch:  # Allows manual run
 
 jobs:
   commit-job:
@@ -14,7 +14,8 @@ jobs:
 
       - name: Update daily log - 23f2002677@ds.study.iitm.ac.in
         run: |
-          echo "Last updated at $(date)" >> daily_commit_log.txt
+          # Append current timestamp to guarantee a change
+          echo "Last updated at $(date +'%Y-%m-%d %H:%M:%S')" >> daily_commit_log.txt
 
       - name: Configure Git
         run: |
@@ -24,7 +25,7 @@ jobs:
       - name: Commit changes
         run: |
           git add daily_commit_log.txt
-          git commit -m "Daily commit from GitHub Action $(date)" || echo "No changes to commit"
+          git commit -m "Daily commit from GitHub Action $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
 
       - name: Push changes
         run: git push
